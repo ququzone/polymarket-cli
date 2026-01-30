@@ -5,9 +5,9 @@ import (
 )
 
 type Config struct {
-	APIKey     string
-	APISecret  string
-	Debug      bool
+	APIKey       string
+	APISecret    string
+	Debug        bool
 	OutputFormat string // json, table, etc.
 }
 
@@ -15,9 +15,9 @@ var AppCfg *Config
 
 func Init() {
 	AppCfg = &Config{
-		APIKey:      viper.GetString("api_key"),
-		APISecret:   viper.GetString("api_secret"),
-		Debug:       viper.GetBool("debug"),
+		APIKey:       viper.GetString("api_key"),
+		APISecret:    viper.GetString("api_secret"),
+		Debug:        viper.GetBool("debug"),
 		OutputFormat: viper.GetString("output_format"),
 	}
 

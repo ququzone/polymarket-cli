@@ -11,10 +11,8 @@ A CLI tool for Polymarket.
 ## Installation
 
 ```bash
-make build
+go build -o bin/polymarket-cli
 ```
-
-The binary will be created in `bin/polymarket-cli`.
 
 ## Usage
 
@@ -47,16 +45,13 @@ output_format: "table"
 
 ```bash
 # Run the application
-make run
+go run main.go
 
 # Run tests
-make test
+go test -v ./...
 
 # Format code
-make fmt
-
-# Install dependencies
-make deps
+go fmt ./...
 ```
 
 ## Project Structure
@@ -65,13 +60,10 @@ make deps
 .
 ├── cmd/              # CLI commands
 │   ├── root.go       # Root command
-│   ├── version.go    # Version command
 │   └── example.go    # Example subcommand
 ├── internal/         # Private application code
-│   ├── config/       # Configuration management
-│   └── client/       # API client
+│   └── config/       # Configuration management
 ├── main.go           # Application entry point
-├── Makefile          # Build commands
 └── go.mod            # Go modules
 ```
 
@@ -104,5 +96,5 @@ func init() {
 2. Rebuild the application:
 
 ```bash
-make build
+go build
 ```

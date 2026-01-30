@@ -26,8 +26,6 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.polymarket-cli.yaml)")
-
-	rootCmd.Flags().BoolP("version", "v", false, "Print version information")
 }
 
 func initConfig() {
