@@ -3,5 +3,4 @@
 
 api_key: "your-api-key-here"
 api_secret: "your-api-secret-here"
-debug: false
-output_format: "table"  # json, table, csv
+data_api_base_url: "https://data-api.polymarket.com"
