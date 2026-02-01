@@ -81,7 +81,7 @@ func executeRedeem(conditionID []byte) (*relayer.ExecuteResponse, error) {
 		relayerTxType = relayer.RelayerTxTypePROXY
 	}
 
-	client, err := relayer.NewClient(creds, relayerTxType, &privateKey)
+	client, err := relayer.NewClient(creds, relayerTxType, nil, &privateKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create relayer client: %w", err)
 	}

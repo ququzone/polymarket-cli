@@ -12,20 +12,27 @@ type Transaction struct {
 	Value *big.Int       `json:"value"`
 }
 
+type SafeTransaction struct {
+	To        common.Address `json:"to"`
+	Operation uint8          `json:"operation"`
+	Data      []byte         `json:"data"`
+	Value     *big.Int       `json:"value"`
+}
+
 type SignatureParams struct {
-	GasPrice        *string `json:"gasPrice"`
-	RelayerFee      *string `json:"relayerFee"`
-	GasLimit        *string `json:"gasLimit"`
-	RelayHub        *string `json:"relayHub"`
-	Relay           *string `json:"relay"`
-	Operation       *string `json:"operation"`
-	SafeTxnGas      *string `json:"safeTxnGas"`
-	BaseGas         *string `json:"baseGas"`
-	GasToken        *string `json:"gasToken"`
-	RefundReceiver  *string `json:"refundReceiver"`
-	PaymentToken    *string `json:"paymentToken"`
-	Payment         *string `json:"payment"`
-	PaymentReceiver *string `json:"paymentReceiver"`
+	GasPrice        *string `json:"gasPrice,omitempty"`
+	RelayerFee      *string `json:"relayerFee,omitempty"`
+	GasLimit        *string `json:"gasLimit,omitempty"`
+	RelayHub        *string `json:"relayHub,omitempty"`
+	Relay           *string `json:"relay,omitempty"`
+	Operation       *string `json:"operation,omitempty"`
+	SafeTxnGas      *string `json:"safeTxnGas,omitempty"`
+	BaseGas         *string `json:"baseGas,omitempty"`
+	GasToken        *string `json:"gasToken,omitempty"`
+	RefundReceiver  *string `json:"refundReceiver,omitempty"`
+	PaymentToken    *string `json:"paymentToken,omitempty"`
+	Payment         *string `json:"payment,omitempty"`
+	PaymentReceiver *string `json:"paymentReceiver,omitempty"`
 }
 
 type TransactionRequest struct {

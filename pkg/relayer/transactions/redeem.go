@@ -31,7 +31,19 @@ func BuildRedeemTransaction(params RedeemParams) (*Transaction, error) {
 }
 
 func encodeRedeemPositions(params RedeemParams) ([]byte, error) {
-	redeemABI := `[{"constant":false,"inputs":[{"name":"collateralToken","type":"address"},{"name":"parentCollectionId","type":"bytes32"},{"name":"conditionId","type":"bytes32"},{"name":"indexSets","type":"uint256[]"}],"name":"redeemPositions","outputs":[]}]`
+	redeemABI := `
+	[{
+      "name": "redeemPositions",
+      "type": "function",
+      "inputs": [
+        { "name": "collateralToken", "type": "address" },
+        { "name": "parentCollectionId", "type": "bytes32" },
+        { "name": "conditionId", "type": "bytes32" },
+        { "name": "indexSets", "type": "uint256[]" }
+      ],
+      "outputs": []
+    }]
+	`
 
 	parsedABI, err := abi.JSON(strings.NewReader(redeemABI))
 	if err != nil {

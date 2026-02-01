@@ -14,15 +14,15 @@ func BuildHmacSignature(
 	method string,
 	requestPath string,
 	body *string,
-) string {
+) (string, error) {
 	message := strconv.FormatInt(timestamp, 10) + method + requestPath
 	if body != nil {
 		message += *body
 	}
 
-	base64Secret, err := base64.StdEncoding.DecodeString(secret)
+	base64Secret, err := base64.URLEncoding.DecodeString(secret)
 	if err != nil {
-		base64Secret = []byte(secret)
+		return "", err
 	}
 
 	h := hmac.New(sha256.New, base64Secret)
@@ -33,5 +33,5 @@ func BuildHmacSignature(
 
 	sigURLSafe := strings.ReplaceAll(sigBase64, "+", "-")
 	sigURLSafe = strings.ReplaceAll(sigURLSafe, "/", "_")
-	return sigURLSafe
+	return sigURLSafe, nil
 }
