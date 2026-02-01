@@ -36,7 +36,6 @@ type SignatureParams struct {
 }
 
 type TransactionRequest struct {
-	Type            string          `json:"type"`
 	From            string          `json:"from"`
 	To              string          `json:"to"`
 	ProxyWallet     *string         `json:"proxyWallet,omitempty"`
@@ -44,5 +43,6 @@ type TransactionRequest struct {
 	Nonce           *string         `json:"nonce,omitempty"`
 	Signature       string          `json:"signature"`
 	SignatureParams SignatureParams `json:"signatureParams"`
+	Type            string          `json:"type"`
 	Metadata        *string         `json:"metadata,omitempty"`
 }

@@ -57,7 +57,7 @@ var redeemCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println(string(jsonData))
+		fmt.Printf("Redeem positions result: %s\n", string(jsonData))
 	},
 }
 

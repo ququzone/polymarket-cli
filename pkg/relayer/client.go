@@ -240,7 +240,7 @@ func (c *Client) buildSafeTransactionRequest(txs []*transactions.SafeTransaction
 		From:        c.address.Hex(),
 		To:          transaction.To.Hex(),
 		ProxyWallet: &safeAddress,
-		Data:        hex.EncodeToString(transaction.Data),
+		Data:        "0x" + hex.EncodeToString(transaction.Data),
 		Nonce:       nonce,
 		Signature:   signature,
 		SignatureParams: transactions.SignatureParams{
