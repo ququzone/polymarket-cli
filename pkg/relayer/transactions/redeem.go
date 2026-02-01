@@ -10,20 +10,21 @@ import (
 )
 
 type RedeemParams struct {
+	ConditionalTokens  common.Address
 	CollateralToken    common.Address
 	ParentCollectionID common.Hash
 	ConditionID        common.Hash
 	IndexSets          []*big.Int
 }
 
-func BuildRedeemTransaction(ctfAddress common.Address, params RedeemParams) (*Transaction, error) {
+func BuildRedeemTransaction(params RedeemParams) (*Transaction, error) {
 	data, err := encodeRedeemPositions(params)
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode redeem positions: %w", err)
 	}
 
 	return &Transaction{
-		To:    ctfAddress,
+		To:    params.ConditionalTokens,
 		Data:  data,
 		Value: big.NewInt(0),
 	}, nil

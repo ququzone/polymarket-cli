@@ -21,6 +21,11 @@ const (
 	polygonChainID    = 137
 )
 
+var (
+	CTF_ADDRESS  = common.HexToAddress("0x4D97DCd97eC945f40cF65F87097ACe5EA0476045")
+	USDC_ADDRESS = common.HexToAddress("0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174")
+)
+
 type BuilderCreds struct {
 	Key        string
 	Secret     string
