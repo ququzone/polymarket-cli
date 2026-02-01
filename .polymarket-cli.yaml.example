@@ -1,6 +1,7 @@
 # Example configuration file
 # Copy this to ~/.polymarket-cli.yaml and fill in your values
 
-api_key: "your-api-key-here"
-api_secret: "your-api-secret-here"
+builder:
+    api_key: "your-api-key-here"
+    api_secret: "your-api-secret-here"
 data_api_base_url: "https://data-api.polymarket.com"
