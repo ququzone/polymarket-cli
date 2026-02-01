@@ -76,7 +76,7 @@ type ExecuteResponse struct {
 	TransactionHash string `json:"transactionHash"`
 }
 
-func (c *Client) Execute(txs []transactions.Transaction, metadata string) (*ExecuteResponse, error) {
+func (c *Client) Execute(txs []*transactions.Transaction, metadata string) (*ExecuteResponse, error) {
 	reqBody := transactions.TransactionRequest{}
 
 	bodyBytes, err := json.Marshal(reqBody)

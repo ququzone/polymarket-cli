@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/spf13/cobra"
+
 	"polymarket-cli/internal/client"
 	"polymarket-cli/internal/config"
-
-	"github.com/spf13/cobra"
 )
 
 var (
