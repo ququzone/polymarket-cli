@@ -12,6 +12,8 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
+
+	"polymarket-cli/pkg/relayer/transactions"
 )
 
 const (
@@ -34,29 +36,25 @@ type Client struct {
 	txType     RelayerTxType
 }
 
-func NewClient(creds *BuilderCreds, privateKeyHex string) (*Client, error) {
-	privateKey, err := crypto.HexToECDSA(privateKeyHex)
-	if err != nil {
-		return nil, fmt.Errorf("invalid private key: %w", err)
-	}
-
-	address := crypto.PubkeyToAddress(privateKey.PublicKey)
-
-	return &Client{
+func NewClient(creds *BuilderCreds, txType RelayerTxType, privateKeyHex *string) (*Client, error) {
+	client := &Client{
 		baseURL: DefaultRelayerURL,
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
-		creds:      creds,
-		privateKey: privateKey,
-		address:    address,
-	}, nil
-}
+		creds:  creds,
+		txType: txType,
+	}
 
-type Transaction struct {
-	To    string `json:"to"`
-	Data  string `json:"data"`
-	Value string `json:"value"`
+	if privateKeyHex != nil {
+		privateKey, err := crypto.HexToECDSA(*privateKeyHex)
+		if err != nil {
+			return nil, fmt.Errorf("invalid private key: %w", err)
+		}
+		client.privateKey = privateKey
+	}
+
+	return client, nil
 }
 
 type RelayerTxType string
@@ -66,12 +64,6 @@ const (
 	RelayerTxTypePROXY RelayerTxType = "PROXY"
 )
 
-type executeRequest struct {
-	Transactions []Transaction `json:"transactions"`
-	TxType       RelayerTxType `json:"txType"`
-	Metadata     string        `json:"metadata"`
-}
-
 type ExecuteResponse struct {
 	TransactionID   string `json:"transactionID"`
 	State           string `json:"state"`
@@ -79,16 +71,8 @@ type ExecuteResponse struct {
 	TransactionHash string `json:"transactionHash"`
 }
 
-func (c *Client) Execute(txs []Transaction, metadata string) (*ExecuteResponse, error) {
-	if c.txType == "" {
-		c.txType = RelayerTxTypeSAFE
-	}
-
-	reqBody := executeRequest{
-		Transactions: txs,
-		TxType:       c.txType,
-		Metadata:     metadata,
-	}
+func (c *Client) Execute(txs []transactions.Transaction, metadata string) (*ExecuteResponse, error) {
+	reqBody := transactions.TransactionRequest{}
 
 	bodyBytes, err := json.Marshal(reqBody)
 	if err != nil {

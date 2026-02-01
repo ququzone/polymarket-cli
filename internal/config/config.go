@@ -4,18 +4,26 @@ import (
 	"github.com/spf13/viper"
 )
 
+type BuilderConfig struct {
+	APIKey     string `mapstructure:"api_key"`
+	Passphrase string `mapstructure:"passphrase"`
+	APISecret  string `mapstructure:"api_secret"`
+}
+
 type Config struct {
-	APIKey         string
-	APISecret      string
-	DataAPIBaseURL string
+	Builder        BuilderConfig `mapstructure:"builder"`
+	DataAPIBaseURL string        `mapstructure:"data_api_base_url"`
 }
 
 var AppCfg *Config
 
 func Init() {
 	AppCfg = &Config{
-		APIKey:         viper.GetString("api_key"),
-		APISecret:      viper.GetString("api_secret"),
+		Builder: BuilderConfig{
+			APIKey:     viper.GetString("builder.api_key"),
+			Passphrase: viper.GetString("builder.passphrase"),
+			APISecret:  viper.GetString("builder.api_secret"),
+		},
 		DataAPIBaseURL: viper.GetString("data_api_base_url"),
 	}
 
