@@ -191,35 +191,23 @@ func (c *Client) buildTransactionRequest(txs []*transactions.Transaction, metada
 	}
 }
 
-func (c *Client) buildSafeTransactionRequest(txs []*transactions.SafeTransaction, metadata string) (*transactions.TransactionRequest, error) {
+func (c *Client) buildSafeStructHash(safeAddress common.Address, tx *transactions.SafeTransaction) ([]byte, *big.Int, error) {
 	nonce, err := c.GetNonce(c.address.Hex())
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	nonceBig, _ := new(big.Int).SetString(*nonce, 10)
 
-	safeFactory := common.HexToAddress(SafeFactory)
-	safeMultisend := common.HexToAddress(SafeMultisend)
-	transaction, err := aggregateTransaction(txs, safeMultisend)
-	if err != nil {
-		return nil, err
-	}
-	safeTxnGas := "0"
-	baseGas := "0"
-	gasPrice := "0"
 	gasToken := ZeroAddress
 	refundReceiver := ZeroAddress
-	operationStr := fmt.Sprint(transaction.Operation)
 
-	safeAddress := DeriveSafe(c.address, safeFactory).Hex()
-
-	structHash, err := CreateStructHash(
+	hash, err := CreateStructHash(
 		c.chainId,
-		common.HexToAddress(safeAddress),
-		transaction.To,
-		transaction.Value,
-		transaction.Data,
-		transaction.Operation,
+		safeAddress,
+		tx.To,
+		tx.Value,
+		tx.Data,
+		tx.Operation,
 		big.NewInt(0),
 		big.NewInt(0),
 		big.NewInt(0),
@@ -227,6 +215,16 @@ func (c *Client) buildSafeTransactionRequest(txs []*transactions.SafeTransaction
 		common.HexToAddress(refundReceiver),
 		nonceBig,
 	)
+	return hash, nonceBig, err
+}
+
+func (c *Client) buildSafeTransactionRequest(txs []*transactions.SafeTransaction, metadata string) (*transactions.TransactionRequest, error) {
+	safeMultisend := common.HexToAddress(SafeMultisend)
+	transaction, err := aggregateTransaction(txs, safeMultisend)
+	safeFactory := common.HexToAddress(SafeFactory)
+	safeAddress := DeriveSafe(c.address, safeFactory).Hex()
+
+	structHash, nonce, err := c.buildSafeStructHash(common.HexToAddress(safeAddress), transaction)
 	if err != nil {
 		return nil, err
 	}
@@ -236,20 +234,24 @@ func (c *Client) buildSafeTransactionRequest(txs []*transactions.SafeTransaction
 		return nil, err
 	}
 
+	nonceStr := nonce.String()
+	zeroStr := "0"
+	operationStr := fmt.Sprint(transaction.Operation)
+	zeroAddress := ZeroAddress
 	return &transactions.TransactionRequest{
 		From:        c.address.Hex(),
 		To:          transaction.To.Hex(),
 		ProxyWallet: &safeAddress,
 		Data:        "0x" + hex.EncodeToString(transaction.Data),
-		Nonce:       nonce,
+		Nonce:       &nonceStr,
 		Signature:   signature,
 		SignatureParams: transactions.SignatureParams{
-			GasPrice:       &gasPrice,
+			GasPrice:       &zeroStr,
 			Operation:      &operationStr,
-			SafeTxnGas:     &safeTxnGas,
-			BaseGas:        &baseGas,
-			GasToken:       &gasToken,
-			RefundReceiver: &refundReceiver,
+			SafeTxnGas:     &zeroStr,
+			BaseGas:        &zeroStr,
+			GasToken:       &zeroAddress,
+			RefundReceiver: &zeroAddress,
 		},
 		Type:     "SAFE",
 		Metadata: &metadata,
