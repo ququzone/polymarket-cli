@@ -58,7 +58,7 @@ func init() {
 	positionsCmd.Flags().StringSliceVar(&market, "market", []string{}, "Comma-separated list of condition IDs")
 	positionsCmd.Flags().IntSliceVar(&eventID, "event-id", []int{}, "Comma-separated list of event IDs")
 	positionsCmd.Flags().Float64Var(&sizeThreshold, "size-threshold", 1, "Minimum size threshold")
-	positionsCmd.Flags().BoolVar(&redeemable, "redeemable", true, "Filter redeemable positions")
+	positionsCmd.Flags().BoolVar(&redeemable, "redeemable", false, "Filter redeemable positions")
 	positionsCmd.Flags().BoolVar(&mergeable, "mergeable", false, "Filter mergeable positions")
 	positionsCmd.Flags().IntVar(&limit, "limit", 100, "Limit results (0-500)")
 	positionsCmd.Flags().IntVar(&offset, "offset", 0, "Offset for pagination (0-10000)")
@@ -117,10 +117,14 @@ func fetchPositions(userAddr string) ([]Position, error) {
 
 	if redeemable {
 		query.Set("redeemable", "true")
+	} else {
+		query.Set("redeemable", "false")
 	}
 
 	if mergeable {
 		query.Set("mergeable", "true")
+	} else {
+		query.Set("mergeable", "false")
 	}
 
 	query.Set("limit", fmt.Sprintf("%d", limit))
