@@ -13,6 +13,7 @@ type BuilderConfig struct {
 type Config struct {
 	Builder        BuilderConfig `mapstructure:"builder"`
 	DataAPIBaseURL string        `mapstructure:"data_api_base_url"`
+	PrivateKey     string        `mapstructure:"private_key"`
 }
 
 var AppCfg *Config
@@ -25,6 +26,7 @@ func Init() {
 			APISecret:  viper.GetString("builder.api_secret"),
 		},
 		DataAPIBaseURL: viper.GetString("data_api_base_url"),
+		PrivateKey:     viper.GetString("private_key"),
 	}
 
 	if AppCfg.DataAPIBaseURL == "" {

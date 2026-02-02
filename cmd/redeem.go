@@ -15,8 +15,7 @@ import (
 )
 
 var (
-	privateKey string
-	txType     string
+	txType string
 )
 
 var redeemCmd = &cobra.Command{
@@ -35,8 +34,8 @@ var redeemCmd = &cobra.Command{
 			return
 		}
 
-		if len(privateKey) == 0 {
-			fmt.Println("Error: private key is required")
+		if len(config.AppCfg.PrivateKey) == 0 {
+			fmt.Println("Error: private key is required in config")
 			return
 		}
 
@@ -64,9 +63,7 @@ var redeemCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(redeemCmd)
 
-	redeemCmd.Flags().StringVar(&privateKey, "private-key", "", "Private key for signing (required)")
 	redeemCmd.Flags().StringVar(&txType, "tx-type", "SAFE", "Transaction type (SAFE or PROXY)")
-	redeemCmd.MarkFlagRequired("private-key")
 }
 
 func executeRedeem(conditionID []byte) (*relayer.ExecuteResponse, error) {
@@ -81,7 +78,7 @@ func executeRedeem(conditionID []byte) (*relayer.ExecuteResponse, error) {
 		relayerTxType = relayer.RelayerTxTypePROXY
 	}
 
-	client, err := relayer.NewClient(creds, relayerTxType, nil, &privateKey)
+	client, err := relayer.NewClient(creds, relayerTxType, nil, &config.AppCfg.PrivateKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create relayer client: %w", err)
 	}

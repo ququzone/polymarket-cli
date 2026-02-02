@@ -6,3 +6,4 @@ builder:
     passphrase: "your-api-key-passphrase"
     api_secret: "your-api-secret-here"
 data_api_base_url: "https://data-api.polymarket.com"
+private_key: "your-private-key"
