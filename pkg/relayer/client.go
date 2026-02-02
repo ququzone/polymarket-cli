@@ -191,7 +191,7 @@ func (c *Client) buildTransactionRequest(txs []*transactions.Transaction, metada
 	}
 }
 
-func (c *Client) buildSafeStructHash(safeAddress common.Address, tx *transactions.SafeTransaction) ([]byte, *big.Int, error) {
+func (c *Client) BuildSafeStructHash(safeAddress common.Address, tx *transactions.SafeTransaction) ([]byte, *big.Int, error) {
 	nonce, err := c.GetNonce(c.address.Hex())
 	if err != nil {
 		return nil, nil, err
@@ -224,7 +224,7 @@ func (c *Client) buildSafeTransactionRequest(txs []*transactions.SafeTransaction
 	safeFactory := common.HexToAddress(SafeFactory)
 	safeAddress := DeriveSafe(c.address, safeFactory).Hex()
 
-	structHash, nonce, err := c.buildSafeStructHash(common.HexToAddress(safeAddress), transaction)
+	structHash, nonce, err := c.BuildSafeStructHash(common.HexToAddress(safeAddress), transaction)
 	if err != nil {
 		return nil, err
 	}
